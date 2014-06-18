@@ -2,9 +2,9 @@
 
 cp -r ./*.ls /d/lecseek-local/
 cp -r ./*.js /d/lecseek-local/
-#cp -r ./*.html ~/lecseek-local/
-cp -r ./*.css ~/lecseek-local/
-cp -r ./*.py ~/lecseek-local/
+#cp -r ./*.html /d/lecseek-local/
+cp -r ./*.css /d/lecseek-local/
+cp -r ./*.py /d/lecseek-local/
 
 cp -r ./static/*.ls /d/lecseek-local/static/
 cp -r ./static/*.js /d/lecseek-local/static/

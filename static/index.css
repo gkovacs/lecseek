@@ -8,7 +8,7 @@
 position: absolute; 
 top: 0; 
 left: 0; 
-width: 200px; /*Width of left frame div*/
+width: 350px; /*Width of left frame div*/
 height: 100%;
 overflow: hidden; /*Disable scrollbars. Set to "scroll" to enable*/
 background-color: navy;
@@ -18,7 +18,7 @@ color: white;
 #framecontentRight{
 left: auto;
 right: 0; 
-width: 150px; /*Width of right frame div*/
+width: 350px; /*Width of right frame div*/
 overflow: hidden; /*Disable scrollbars. Set to "scroll" to enable*/
 background-color: navy;
 color: white;
@@ -27,8 +27,8 @@ color: white;
 #maincontent{
 position: fixed; 
 top: 0;
-left: 200px; /*Set left value to WidthOfLeftFrameDiv*/
-right: 150px; /*Set right value to WidthOfRightFrameDiv*/
+left: 350px; /*Set left value to WidthOfLeftFrameDiv*/
+right: 350px; /*Set right value to WidthOfRightFrameDiv*/
 bottom: 0;
 overflow: auto; 
 background: #fff;
