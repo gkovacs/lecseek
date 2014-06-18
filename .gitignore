@@ -1,0 +1,5 @@
+*.mp4
+*.srt
+*.webm
+node_modules
+Thumbs.db

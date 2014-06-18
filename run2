@@ -1,0 +1,3 @@
+#!/bin/bash
+
+python video-segment-server.py
