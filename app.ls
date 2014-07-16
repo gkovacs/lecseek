@@ -84,11 +84,43 @@ getTextAtTime = (subtitle_file, start, end) ->
     start_time = srt_time_to_seconds(sub.startTime)
     end_time = srt_time_to_seconds(sub.endTime)
     mid_time = (start_time + end_time) / 2.0
-    #if start <= mid_time <= end
-    if start <= end_time <= end
+    if start <= mid_time <= end
       output.push sub.text
   return output.join('\n')
 
+#exec = require('child_process').exec
+spawn = require('child_process').spawn
+fs = require 'fs'
+
+makeSegment = (video, start, end, output, callback) ->
+  extra_options = []
+  if output.indexOf('.webm') != -1
+    extra_options = <[ -cpu-used -5 -deadline realtime ]>
+  command = 'avconv'
+  options = ['-ss', start, '-t', (end - start), '-i', video].concat extra_options.concat ['-y', output]
+  ffmpeg = spawn command, options
+  ffmpeg.stdout.on 'data', (data) ->
+    console.log 'stdout:' + data
+  ffmpeg.stderr.on 'data', (data) ->
+    console.log 'stderr:' + data
+  ffmpeg.on 'exit', (code) ->
+    console.log 'exited with code:' + code
+    callback() if callback?
+
+app.get '/segmentvideo', (req, res) ->
+  console.log 'segmentvideo'
+  video = req.query.video
+  start = req.query.start
+  end = req.query.end
+  video_base = video.split('.')[0]
+  video_path = 'videos/' + video
+  output_file = video_base + '_' + start + '_' + end + '.webm'
+  output_path = 'static/' + output_file
+  if fs.existsSync(output_path)
+    res.sendfile output_path
+  else
+    makeSegment video_path, start, end, output_path, ->
+      res.sendfile output_path
 
 to_machine_readable_timestamps = (tree, file, subtitle_file) ->
   output = {[k, v] for k,v of tree}
@@ -106,7 +138,7 @@ to_machine_readable_timestamps = (tree, file, subtitle_file) ->
     output.end = to_numeric_time(output.end)
   if output.file? and output.start? and output.end?
     #output.url = "#{output.file}\#t=#{output.start},#{output.end}"
-    output.url = "http://localhost:5000/segmentvideo?start=#{output.start}&end=#{output.end}&video=#{output.file}"
+    output.url = "segmentvideo?start=#{output.start}&end=#{output.end}&video=#{output.file}"
   if output.subtitle_file? and output.start? and output.end?
     output.text = getTextAtTime(output.subtitle_file, output.start, output.end)
   if output.children? and output.children.length?
